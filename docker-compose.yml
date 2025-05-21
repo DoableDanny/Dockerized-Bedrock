@@ -1,0 +1,54 @@
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html # Local files
+      - vendor_data:/var/www/html/vendor # From PHP container
+      - wp_core:/var/www/html/web/wp # From PHP container
+    depends_on:
+      - php
+    networks:
+      - app
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+      # - /var/www/html/vendor
+      # - /var/www/html/web/wp
+      - vendor_data:/var/www/html/vendor
+      - wp_core:/var/www/html/web/wp
+    env_file: .env
+    networks:
+      - app
+    # command: >
+    #   sh -c "if [ ! -f /var/www/html/web/wp/index.php ]; then
+    #     cp -r /wp-core-backup/. /var/www/html/web/wp;
+    #   fi && php-fpm"
+
+  mysql:
+    image: mysql:8.0
+    container_name: bedrock-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app
+
+volumes:
+  dbdata:
+  vendor_data:
+  wp_core:
+
+networks:
+  app:
+    driver: bridge
