@@ -1,3 +1,13 @@
+## How to use this Dockerized Bedrock WordPress repo
+
+- Create .env file in root
+- Copy paste the .env.example into .env and change variables as needed (the defaults should be enough to get you going in dev)
+- `docker compose up --build`
+
+Created by Dan Adams
+
+The usual Bedrock README stuff...
+
 <p align="center">
   <a href="https://roots.io/bedrock/">
     <img alt="Bedrock" src="https://cdn.roots.io/app/uploads/logo-bedrock.svg" height="100">
