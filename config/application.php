@@ -142,14 +142,20 @@ Config::define('WP_DEBUG_LOG', false);
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
 
-// TODO: these should come from .env
-Config::define('WP_ALLOW_MULTISITE', true);
-Config::define('MULTISITE', true);
-Config::define('SUBDOMAIN_INSTALL', true);
-Config::define('DOMAIN_CURRENT_SITE', 'docker.local');
-Config::define('PATH_CURRENT_SITE', '/');
-Config::define('SITE_ID_CURRENT_SITE', 1);
-Config::define('BLOG_ID_CURRENT_SITE', 1);
+/**
+ * WordPress multisite config. NOTE: MULTISITE must be false on initial installation
+ */
+Config::define('WP_ALLOW_MULTISITE', env('WP_ALLOW_MULTISITE'));
+$isMultisiteEnabled = filter_var(env('MULTISITE'), FILTER_VALIDATE_BOOLEAN);
+error_log('Multisite enabled: ' . ($isMultisiteEnabled ? 'true' : 'false'));
+if($isMultisiteEnabled) {
+    Config::define('MULTISITE', $isMultisiteEnabled);
+    Config::define('SUBDOMAIN_INSTALL', env('SUBDOMAIN_INSTALL'));
+    Config::define('DOMAIN_CURRENT_SITE', env('DOMAIN_CURRENT_SITE'));
+    Config::define('PATH_CURRENT_SITE', env('PATH_CURRENT_SITE'));
+    Config::define('SITE_ID_CURRENT_SITE', env('SITE_ID_CURRENT_SITE'));
+    Config::define('BLOG_ID_CURRENT_SITE', env('BLOG_ID_CURRENT_SITE'));
+}
 
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer

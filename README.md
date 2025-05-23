@@ -23,19 +23,15 @@ Now, docker.local and the other subdomains will map to localhost (localhost:80).
 
 ### To start multisite on WordPress
 
-1. in config/application.php:
-
-```php
-Config::define('WP_ALLOW_MULTISITE', true);
-// Config::define('MULTISITE', true);
-// Config::define('SUBDOMAIN_INSTALL', true);
-// Config::define('DOMAIN_CURRENT_SITE', 'docker.local');
-// Config::define('PATH_CURRENT_SITE', '/');
-// Config::define('SITE_ID_CURRENT_SITE', 1);
-// Config::define('BLOG_ID_CURRENT_SITE', 1);
-```
-
-2. Go to http://docker.local/wp/wp-admin/network/ and follow the steps.
+1. On initial wp installation, `MULTISITE` in .env must be false.
+2. After you've gone through the wp install steps, go to http://docker.local/wp/wp-admin/network.php
+3. Select "Sub-domains" and click "Install". You should see a page with "Create a Network of WordPress Sites". Stay here.
+4. Stop docker containers with `docker compose down`.
+5. Change `MULTISITE` in .env to true.
+6. Restart everything: `docker compose up`
+7. Click "login" at bottom of the page
+8. Login
+9. If you see "My Sites" in top left, you are setup 🤝
 
 Created by Dan Adams
 
