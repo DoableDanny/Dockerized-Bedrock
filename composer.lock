@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0ce1620088dab1da38579d11c4a7255",
+    "content-hash": "90f12913aa638d28c10b49304158f092",
     "packages": [
         {
             "name": "composer/installers",
@@ -1019,6 +1019,24 @@
             "time": "2025-04-30T23:37:27+00:00"
         },
         {
+            "name": "wpackagist-plugin/akismet",
+            "version": "5.4",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/akismet/",
+                "reference": "tags/5.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/akismet.5.4.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/akismet/"
+        },
+        {
             "name": "wpackagist-theme/twentytwentyfive",
             "version": "1.2",
             "source": {
@@ -1530,6 +1548,6 @@
     "platform": {
         "php": ">=8.1"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }

@@ -1,3 +1,6 @@
 vendor
 web/wp
 node_modules
+web/app/mu-plugins
+web/app/plugins
+.env

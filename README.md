@@ -4,6 +4,39 @@
 - Copy paste the .env.example into .env and change variables as needed (the defaults should be enough to get you going in dev)
 - `docker compose up --build`
 
+The file to modify for configuration options is config/application.php. This is the file that contains what wp-config.php usually would. The root web/wp-config.php is required by WordPress and is only used to load the other main configs. Nothing else should be added to it.
+
+## Allowing for multisite locally
+
+We cannot have subdomain sites if using localhost as the domain. So (for Mac):
+
+1. `sudo nano /etc/hosts`
+2. Add the following mappings:
+
+```
+127.0.0.1 docker.local
+127.0.0.1 site1.docker.local
+127.0.0.1 site2.docker.local
+```
+
+Now, docker.local and the other subdomains will map to localhost (localhost:80).
+
+### To start multisite on WordPress
+
+1. in config/application.php:
+
+```php
+Config::define('WP_ALLOW_MULTISITE', true);
+// Config::define('MULTISITE', true);
+// Config::define('SUBDOMAIN_INSTALL', true);
+// Config::define('DOMAIN_CURRENT_SITE', 'docker.local');
+// Config::define('PATH_CURRENT_SITE', '/');
+// Config::define('SITE_ID_CURRENT_SITE', 1);
+// Config::define('BLOG_ID_CURRENT_SITE', 1);
+```
+
+2. Go to http://docker.local/wp/wp-admin/network/ and follow the steps.
+
 Created by Dan Adams
 
 The usual Bedrock README stuff...

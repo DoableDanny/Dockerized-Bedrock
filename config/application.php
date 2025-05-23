@@ -142,6 +142,15 @@ Config::define('WP_DEBUG_LOG', false);
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
 
+// TODO: these should come from .env
+Config::define('WP_ALLOW_MULTISITE', true);
+Config::define('MULTISITE', true);
+Config::define('SUBDOMAIN_INSTALL', true);
+Config::define('DOMAIN_CURRENT_SITE', 'docker.local');
+Config::define('PATH_CURRENT_SITE', '/');
+Config::define('SITE_ID_CURRENT_SITE', 1);
+Config::define('BLOG_ID_CURRENT_SITE', 1);
+
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
  * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes

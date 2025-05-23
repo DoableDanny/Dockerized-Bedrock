@@ -2,10 +2,11 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "8080:80"
+      # - "8080:80"
+      - "80:80"
     volumes:
       - .:/var/www/html # Local files
-      - vendor_data:/var/www/html/vendor # From PHP container
+      - vendor_data:/var/www/html/vendor # From PHP container (need named volume for vendor and wp as the above mount would override what is generated inside container via `composer install`)
       - wp_core:/var/www/html/web/wp # From PHP container
     depends_on:
       - php
@@ -18,23 +19,30 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-      # - /var/www/html/vendor
-      # - /var/www/html/web/wp
+
+      # Vendor and wp are generated via composer inside the container, so do not override with local files
       - vendor_data:/var/www/html/vendor
       - wp_core:/var/www/html/web/wp
+
+      # Do not override plugins that were generated inside the container via composer in php image
+      - mu-plugins:/var/www/html/web/app/mu-plugins
+      - plugins:/var/www/html/web/app/plugins
+
+      # Custom plugins must be bind mounted, as they are not composer generate (of course). mu-plugins folder doesn't allow nested plugins (e.g. mu-plugins/custom-plugins/<multiple_plugin_folders>), so have to list one-by-one here
+      - ./web/app/mu-plugins/multisite-url-fixer:/var/www/html/web/app/mu-plugins/multisite-url-fixer
+      - ./web/app/mu-plugins/bedrock-autoloader.php:/var/www/html/web/app/mu-plugins/bedrock-autoloader.php
+      # Standard plugins folder allows nested, so all custom plugins can go in /custom-plugins
+      - ./web/app/plugins/custom-plugins:/var/www/html/web/app/plugins/custom-plugins
     env_file: .env
     networks:
       - app
-    # command: >
-    #   sh -c "if [ ! -f /var/www/html/web/wp/index.php ]; then
-    #     cp -r /wp-core-backup/. /var/www/html/web/wp;
-    #   fi && php-fpm"
 
   mysql:
     image: mysql:8.0
     container_name: bedrock-mysql
     restart: unless-stopped
     environment:
+      # TODO: should come from env
       MYSQL_DATABASE: wordpress
       MYSQL_USER: user
       MYSQL_PASSWORD: password
@@ -48,6 +56,8 @@ volumes:
   dbdata:
   vendor_data:
   wp_core:
+  mu-plugins:
+  plugins:
 
 networks:
   app:
